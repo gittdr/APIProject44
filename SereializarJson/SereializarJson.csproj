@@ -40,7 +40,9 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,13 +56,17 @@
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\Carrier.cs" />
     <Compile Include="Models\City.cs" />
+    <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Equipment.cs" />
+    <Compile Include="Models\FacLabControler.cs" />
     <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\Modelfact.cs" />
     <Compile Include="Models\Phone.cs" />
     <Compile Include="Models\Shipment.cs" />
     <Compile Include="Models\Stops.cs" />
+    <Compile Include="Models\storedProcedure.cs" />
     <Compile Include="Models\Ucontact.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

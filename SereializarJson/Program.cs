@@ -2,6 +2,7 @@
 using SereializarJson.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,55 +30,48 @@ namespace SereializarJson
         public string lastName;
         public MyDate dateOfBirth;
     }
-    class Program
+    public class Program
     {
+        static storedProcedure sql = new storedProcedure("miConexion");
+        public static FacLabControler facLabControler = new FacLabControler();
+        public string tipo = "";
+
         private static string _path = @"C:\Administración\Proyecto API\Json\Contacts.json";
+        private static object contacts;
 
         static void Main(string[] args)
         {
 
             var contacts = GetContacts();
-            SerializeJsonFile(contacts);
-            ////string jsonFactura = "";
-            ////jsonFactura = "{\r\n\r\n  \"carrierIdentifier\": {";
-            ////jsonFactura += "\r\n\r\n\r\n  \"nombre\": Pancho";
-            ////jsonFactura += ",\r\n\r\n\r\n  \"idSucursal\": 20" + "\r\n\r\n},";
-            ////jsonFactura += "\r\n\r\n}";
+            //SerializeJsonFile(contacts);
+            
 
-            //var obj = new Lad
-            //{
-            //    firstName = "Markoff",
-            //    lastName = "Chaney",
-            //    dateOfBirth = new MyDate
-            //    {
-            //        year = 1901,
-            //        month = 4,
-            //        day = 30
-            //    }
-            //};
-            //var json = new JavaScriptSerializer().Serialize(obj);
-            ////Console.WriteLine(json);
-
-            //System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\Json\JSONTralixGenerador.txt", json);   
         }
         #region "Writing JSON"
-        public static void SerializeJsonFile(object contacts)
-        {
-            string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
-            File.WriteAllText(_path, contactsJson);
-        }
+        //public static void SerializeJsonFile(object contacts)
+        //{
+        //    string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
+        //    File.WriteAllText(_path, contactsJson);
+        //}
         public static object GetContacts()
         {
-            Contact contacts = new Contact
+            string datestring = DateTime.Now.ToString("yyyyMMddHHmmss");
+            DataTable otds = facLabControler.GetInfoApi();
+            if (otds.Rows.Count > 0)
             {
-
-
-                carrierIdentifier = new Carrier
+                foreach (DataRow isegm in otds.Rows)
                 {
-                    type = "P44_EU",
-                    value = "DKCARRIE"
-                },
-                shipmentIdentifiers = new List<Shipment>
+                    string tipo = isegm["trc_licnum"].ToString();
+                    Contact contacts = new Contact
+                    {
+
+
+                        carrierIdentifier = new Carrier
+                        {
+                            type = tipo,
+                            value = "DKCARRIE"
+                        },
+                        shipmentIdentifiers = new List<Shipment>
                     {
                         new Shipment
                         {
@@ -85,7 +79,7 @@ namespace SereializarJson
                             value = "1122334455"
                         }
                     },
-                equipmentIdentifiers = new List<Equipment>
+                        equipmentIdentifiers = new List<Equipment>
                     {
                         new Equipment
                         {
@@ -93,7 +87,7 @@ namespace SereializarJson
                             value = "ABC123"
                         }
                     },
-                shipmentStops = new List<Stops>
+                        shipmentStops = new List<Stops>
                     {
                         new Stops
                         {
@@ -157,72 +151,15 @@ namespace SereializarJson
                         }
                     }//AQUI TERMINA EL SEGUNDO STOP
 
-                ////HASTA AQUI TERMINA EL PRIMER CONTACTO
-                //new Contact
-                //{
-                //    Name = "David Beckham",
-                //    DateOfBirth = new DateTime(1988, 06, 17),
-                //    Address = new Address
-                //    {
-                //        Street = "Candiles drive",
-                //        Number = 23,
-                //        City = new City
-                //        {
-                //            Name = "New York",
-                //            Country = new Country
-                //            {
-                //                Code = "USA",
-                //                Name = "United States"
-                //            }
-                //        }
-                //    },
-                //    Phone = new List<Phone>
-                //    {
-                //        new Phone
-                //        {
-                //            Name = "Personal",
-                //            Number = "3221212"
-                //        },
-                //        new Phone
-                //        {
-                //            Name = "Work",
-                //            Number = "32312121"
-                //        }
-                //    }
-                //}, // AQUI TERMINA EL SEGUNDO CONTACTO
-                //new Contact
-                //{
-                //    Name = "Pancho Torres",
-                //    DateOfBirth = new DateTime(1976, 02, 17),
-                //    Address = new Address
-                //    {
-                //        Street = "Amnsterdant drive",
-                //        Number = 23,
-                //        City = new City
-                //        {
-                //            Name = "Puebla",
-                //            Country = new Country
-                //            {
-                //                Code = "MX",
-                //                Name = "México"
-                //            }
-                //        }
-                //    },
-                //    Phone = new List<Phone>
-                //    {
-                //        new Phone
-                //        {
-                //            Name = "Personal",
-                //            Number = "3432112"
-                //        },
-                //        new Phone
-                //        {
-                //            Name = "Work",
-                //            Number = "43421212"
-                //        }
-                //    }
-                //}//AQUI TERMINA EL TERCER CONTACTO
-            };
+                       
+                    };
+                    string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
+                    System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\Json\" + datestring + "-JsonAPI.json", contactsJson);
+                    //File.WriteAllText(_path, contactsJson);
+
+                }
+            }
+            
             return contacts;
         }
         #endregion
