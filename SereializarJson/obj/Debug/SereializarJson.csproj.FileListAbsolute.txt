@@ -1,0 +1,11 @@
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\bin\Debug\SereializarJson.exe.config
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\bin\Debug\SereializarJson.exe
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\bin\Debug\SereializarJson.pdb
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\obj\Debug\SereializarJson.csproj.AssemblyReference.cache
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\obj\Debug\SereializarJson.csproj.SuggestedBindingRedirects.cache
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\obj\Debug\SereializarJson.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\obj\Debug\SereializarJson.exe
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\obj\Debug\SereializarJson.pdb
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Lenovo\source\repos\SereializarJson\SereializarJson\obj\Debug\SereializarJson.csproj.CopyComplete
