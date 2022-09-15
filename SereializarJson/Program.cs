@@ -61,24 +61,23 @@ namespace SereializarJson
             //System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\Json\JSONTralixGenerador.txt", json);   
         }
         #region "Writing JSON"
-        public static void SerializeJsonFile(List<Contact> contacts)
+        public static void SerializeJsonFile(object contacts)
         {
-            string contactsJson = JsonConvert.SerializeObject(contacts.ToArray(), Formatting.Indented);
+            string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
             File.WriteAllText(_path, contactsJson);
         }
-        public static List<Contact> GetContacts()
+        public static object GetContacts()
         {
-            List<Contact> contacts = new List<Contact>
+            Contact contacts = new Contact
             {
 
-                new Contact
+
+                carrierIdentifier = new Carrier
                 {
-                    carrierIdentifier = new Carrier
-                    {
-                        type = "P44_EU",
-                        value = "DKCARRIE"
-                    },
-                    shipmentIdentifiers = new List<Shipment>
+                    type = "P44_EU",
+                    value = "DKCARRIE"
+                },
+                shipmentIdentifiers = new List<Shipment>
                     {
                         new Shipment
                         {
@@ -86,7 +85,7 @@ namespace SereializarJson
                             value = "1122334455"
                         }
                     },
-                    equipmentIdentifiers = new List<Equipment>
+                equipmentIdentifiers = new List<Equipment>
                     {
                         new Equipment
                         {
@@ -94,7 +93,7 @@ namespace SereializarJson
                             value = "ABC123"
                         }
                     },
-                    shipmentStops = new List<Stops>
+                shipmentStops = new List<Stops>
                     {
                         new Stops
                         {
@@ -156,8 +155,8 @@ namespace SereializarJson
                             },
                             stopName = "Example Stop Name"
                         }
-                    }
-                }
+                    }//AQUI TERMINA EL SEGUNDO STOP
+
                 ////HASTA AQUI TERMINA EL PRIMER CONTACTO
                 //new Contact
                 //{
