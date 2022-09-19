@@ -59,6 +59,7 @@
     <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\DataTables.cs" />
     <Compile Include="Models\Equipment.cs" />
     <Compile Include="Models\FacLabControler.cs" />
     <Compile Include="Models\Location.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,10 @@ namespace SereializarJson.Models
         public Carrier carrierIdentifier { get; set; }
         public List<Shipment> shipmentIdentifiers { get; set; }
         public List<Equipment> equipmentIdentifiers { get; set; }
-        public List<Stops> shipmentStops { get; set; }
+        
+        //public DataTables shipmentStops { get; set; }
+        public List<Stops> shipmentStops { get; internal set; }
+
         //public Appointment appointmentWindow { get; set; }
     }
 }

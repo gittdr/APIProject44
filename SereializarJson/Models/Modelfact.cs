@@ -376,13 +376,43 @@ namespace SereializarJson.Models
             }
             return dataTable;
         }
-        public DataTable GetInfoApi()
+        public DataTable GetInfoApi(string order)
         {
             DataTable dataTable = new DataTable();
             using (SqlConnection connection = new SqlConnection(this._ConnectionString))
             {
                 connection.Open();
                 using (SqlCommand selectCommand = new SqlCommand("sp_get_info_api_JC", connection))
+                {
+
+                    selectCommand.CommandType = CommandType.StoredProcedure;
+                    selectCommand.CommandTimeout = 100000;
+                    selectCommand.Parameters.AddWithValue("@order", (object)order);
+                    selectCommand.ExecuteNonQuery();
+                    using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand))
+                    {
+                        try
+                        {
+                            //selectCommand.Connection.Open();
+                            sqlDataAdapter.Fill(dataTable);
+                        }
+                        catch (SqlException ex)
+                        {
+                            connection.Close();
+                            string message = ex.Message;
+                        }
+                    }
+                }
+            }
+            return dataTable;
+        }
+        public DataTable GetOrderApi()
+        {
+            DataTable dataTable = new DataTable();
+            using (SqlConnection connection = new SqlConnection(this._ConnectionString))
+            {
+                connection.Open();
+                using (SqlCommand selectCommand = new SqlCommand("sp_get_order_api_JC", connection))
                 {
 
                     selectCommand.CommandType = CommandType.StoredProcedure;

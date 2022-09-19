@@ -31,9 +31,13 @@ namespace SereializarJson.Models
         {
             return this.modelFact.getLeg();
         }
-        public DataTable GetInfoApi()
+        public DataTable GetInfoApi(string order)
         {
-            return this.modelFact.GetInfoApi();
+            return this.modelFact.GetInfoApi(order);
+        }
+        public DataTable GetOrderApi()
+        {
+            return this.modelFact.GetOrderApi();
         }
         public DataTable ObtSegmento(string orden)
         {

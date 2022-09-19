@@ -56,106 +56,96 @@ namespace SereializarJson
         public static object GetContacts()
         {
             string datestring = DateTime.Now.ToString("yyyyMMddHHmmss");
-            DataTable otds = facLabControler.GetInfoApi();
+            //DataTable otds = facLabControler.GetInfoApi();
+            DataTable otds = facLabControler.GetOrderApi();
             if (otds.Rows.Count > 0)
             {
+                int carc = 1;
                 foreach (DataRow isegm in otds.Rows)
                 {
-                    string tipo = isegm["trc_licnum"].ToString();
+                    //string tipo = isegm["trc_licnum"].ToString();
+                    
+                    string order = isegm["ord_hdrnumber"].ToString();
+                    string licencia = isegm["trc_licnum"].ToString();
+
+
                     Contact contacts = new Contact
-                    {
+                            {
 
 
-                        carrierIdentifier = new Carrier
-                        {
-                            type = tipo,
-                            value = "DKCARRIE"
-                        },
-                        shipmentIdentifiers = new List<Shipment>
-                    {
-                        new Shipment
-                        {
-                            type = "ORDER",
-                            value = "1122334455"
-                        }
-                    },
-                        equipmentIdentifiers = new List<Equipment>
-                    {
-                        new Equipment
-                        {
-                            type = "LICENSE_PLATE",
-                            value = "ABC123"
-                        }
-                    },
-                        shipmentStops = new List<Stops>
-                    {
-                        new Stops
-                        {
-                            stopNumber = 1,
-                            appointmentWindow = new Appointment
-                            {
-                                startDateTime = "2020-12-02T07:30:00",
-                                endDateTime = "2020-12-02T08:00:00",
-                                localTimeZoneIdentifier = "Europe/Brussels"
-                            },
-                            location = new Location
-                            {
-                                address = new Address
+                                carrierIdentifier = new Carrier
                                 {
-                                    postalCode = "9400",
-                                    addressLines = new List<string>
-                                    {
-                                        "Strømmen 6"
-                                    },
-                                    city = "Nørresundby",
-                                    state = "",
-                                    country = "DK"
-                                    //AQUI VA LA LISTA DE ADDRESSLINE
+                                    type = "P44_EU",
+                                    value = "DKCARRIE"
                                 },
-                                contact = new Ucontact
+                                shipmentIdentifiers = new List<Shipment>
                                 {
-                                    companyName = "project44"
-                                }
-                            },
-                            stopName = "project44 Europe HQ"
-                        },//AQUI TERMINA EL PRIMER STOP 
-                        new Stops
-                        {
-                            stopNumber = 2,
-                            appointmentWindow = new Appointment
-                            {
-                                startDateTime = "2020-12-03T20:00:00",
-                                endDateTime = "2020-12-03T22:00:00",
-                                localTimeZoneIdentifier = "Europe/Brussels"
-                            },
-                            location = new Location
-                            {
-                                address = new Address
-                                {
-                                    postalCode = "24983",
-                                    addressLines = new List<string>
+                                    new Shipment
                                     {
-                                        "SKANDINAVIENBOGEN 6"
-                                    },
-                                    city = "HANDEWITT",
-                                    state = "",
-                                    country = "DE"
-                                    //AQUI VA LA LISTA DE ADDRESSLINE
+                                        type = "ORDER",
+                                        value = order
+                                    }
                                 },
-                                contact = new Ucontact
+                                equipmentIdentifiers = new List<Equipment>
                                 {
-                                    companyName = "Example Customer"
-                                }
-                            },
-                            stopName = "Example Stop Name"
-                        }
-                    }//AQUI TERMINA EL SEGUNDO STOP
+                                    new Equipment
+                                    {
+                                        type = "LICENSE_PLATE",
+                                        value = licencia
+                                    }
+                                },
+                               
+                                    shipmentStops = new List<Stops>()
+                                
+                            };
+                            DataTable obtinfoq = facLabControler.GetInfoApi(order);
+                            if (obtinfoq.Rows.Count > 0)
+                            {
+                                foreach (DataRow isegmqa in obtinfoq.Rows)
+                                {
+                                    contacts.shipmentStops.Add(new Stops
+                                    {
+                                        stopNumber = isegmqa["stp_mfh_sequence"].ToString(),
+                                        appointmentWindow = new Appointment
+                                        {
+                                            startDateTime = isegmqa["startDateTime"].ToString(),
+                                            endDateTime = isegmqa["endDateTime"].ToString(),
+                                            localTimeZoneIdentifier = "Mexico/Ciudad de Mexico"
+                                        },
+                                        location = new Location
+                                        {
+                                            address = new Address
+                                            {
+                                                postalCode = isegmqa["cmp_zip"].ToString(),
+                                                addressLines = new List<string>
+                                                {
+                                                    isegmqa["addressLines"].ToString()
+                                                },
+                                                city = isegmqa["cty_nmstct"].ToString(),
+                                                state = isegmqa["cmp_state"].ToString(),
+                                                country = isegmqa["cmp_country"].ToString()
+                                                //AQUI VA LA LISTA DE ADDRESSLINE
+                                            },
+                                            contact = new Ucontact
+                                            {
+                                                companyName = isegmqa["cmp_id"].ToString()
+                                            }
+                                        },
+                                        stopName = isegmqa["cmp_id"].ToString() + " - " + isegmqa["stp_number"].ToString()
 
-                       
-                    };
-                    string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
-                    System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\Json\" + datestring + "-JsonAPI.json", contactsJson);
+                                    });
+
+                                }
+
+                            }
+
+
+                            string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
+                            System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\JsonGenerados\" + datestring +"-"+carc +  "-JsonAPI.json", contactsJson);
                     //File.WriteAllText(_path, contactsJson);
+                    carc++;
+
+
 
                 }
             }
