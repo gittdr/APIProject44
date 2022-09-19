@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using RestSharp;
 using SereializarJson.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
@@ -36,26 +38,35 @@ namespace SereializarJson
         public static FacLabControler facLabControler = new FacLabControler();
         public string tipo = "";
 
-        private static string _path = @"C:\Administración\Proyecto API\Json\Contacts.json";
+        
         private static object contacts;
 
         static void Main(string[] args)
         {
-
+            //ObtenerToken();
             var contacts = GetContacts();
-            //SerializeJsonFile(contacts);
-            
-
+        }
+       
+        public static void ObtenerToken()
+        {
+            var client = new RestClient("https://na12.api.project44.com/");
+            client.Authenticator = new HttpBasicAuthenticator("admin.user@tdr.p44.com", "welcomeP44!");
+            var request = new RestRequest("api/v4/oauth2/client-applications", Method.GET);
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{ \"grant_type\":\"client_credentials\" }", ParameterType.RequestBody);
+            var responseJson = client.Execute(request).Content;
+            var token = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseJson)["clientApplications"].ToString();
+            Console.WriteLine(token);
+            if (token.Length == 0)
+            {
+                throw new AuthenticationException("API authentication failed.");
+            }
         }
         #region "Writing JSON"
-        //public static void SerializeJsonFile(object contacts)
-        //{
-        //    string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
-        //    File.WriteAllText(_path, contactsJson);
-        //}
+
         public static object GetContacts()
         {
-            string datestring = DateTime.Now.ToString("yyyyMMddHHmmss");
+            
             //DataTable otds = facLabControler.GetInfoApi();
             DataTable otds = facLabControler.GetOrderApi();
             if (otds.Rows.Count > 0)
@@ -75,8 +86,8 @@ namespace SereializarJson
 
                                 carrierIdentifier = new Carrier
                                 {
-                                    type = "P44_EU",
-                                    value = "DKCARRIE"
+                                    type = "N/A",
+                                    value = "N/A"
                                 },
                                 shipmentIdentifiers = new List<Shipment>
                                 {
@@ -105,7 +116,8 @@ namespace SereializarJson
                                 {
                                     contacts.shipmentStops.Add(new Stops
                                     {
-                                        stopNumber = isegmqa["stp_mfh_sequence"].ToString(),
+                                        //stopNumber = isegmqa["stp_mfh_sequence"].ToString(),
+                                        stopNumber = isegmqa["stp_number"].ToString(),
                                         appointmentWindow = new Appointment
                                         {
                                             startDateTime = isegmqa["startDateTime"].ToString(),
@@ -139,11 +151,49 @@ namespace SereializarJson
 
                             }
 
+                            Random rd = new Random();
 
+                            int rand_num = rd.Next(100, 200000);
+                            string datestring = DateTime.Now.ToString("yyyyMMddHHmmss");
                             string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
-                            System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\JsonGenerados\" + datestring +"-"+carc +  "-JsonAPI.json", contactsJson);
-                    //File.WriteAllText(_path, contactsJson);
+                            System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\JsonGenerados\Orden-" + order+".json", contactsJson);
+                            //System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\JsonGenerados\" + rand_num + "-" + carc + "-JsonAPI.json", contactsJson);
+
                     carc++;
+
+                    //try
+                    //{
+                    //    var client = new RestClient("https://na12.api.project44.com/api/v4/oauth2/client-applications");
+                    //    //AQUI VAN LAS CREDENCIALES
+                    //    var user = "admin.user@tdr.p44.com";
+                    //    var password = "welcomeP44!";
+                    //    client.Authenticator = new HttpBasicAuthenticator(user, password);
+                    //    var request = new RestRequest(Method.GET);
+
+                    //    request.AddHeader("cache-control", "no-cache");
+
+                    //    request.AddHeader("content-length", "834");
+                    //    request.AddHeader("accept-encoding", "gzip, deflate");
+                    //    request.AddHeader("Host", "canal1.xsa.com.mx:9050");
+                    //    //request.AddHeader("Postman-Token", "b6b7d8eb-29f2-420f-8d70-7775701ec765,a4b60b83-429b-4188-98d4-7983acc6742e");
+                    //    request.AddHeader("Cache-Control", "no-cache");
+                    //    request.AddHeader("Accept", "*/*");
+                    //    request.AddHeader("User-Agent", "PostmanRuntime/7.13.0");
+                    //    request.AddParameter("application/json", contactsJson, ParameterType.RequestBody);
+                    //    //request.AddParameter("application/json", contactsJson, ParameterType.RequestBody);
+                    //    IRestResponse response = client.Execute(request);
+                    //    //string respuesta = response.StatusCode.ToString();
+                    //    //var token = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseJson)["access_token"].ToString();
+                    //    //if (token.Length == 0)
+                    //    //{
+                    //    //    throw new AuthenticationException("API authentication failed.");
+                    //    //}
+                    //}
+                    //catch (Exception)
+                    //{
+
+                    //    throw;
+                    //}
 
 
 
