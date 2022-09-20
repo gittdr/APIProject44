@@ -44,23 +44,25 @@ namespace SereializarJson
         static void Main(string[] args)
         {
             //ObtenerToken();
+           
             var contacts = GetContacts();
         }
        
         public static void ObtenerToken()
         {
-            var client = new RestClient("https://na12.api.project44.com/");
-            client.Authenticator = new HttpBasicAuthenticator("admin.user@tdr.p44.com", "welcomeP44!");
-            var request = new RestRequest("api/v4/oauth2/client-applications", Method.GET);
-            request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{ \"grant_type\":\"client_credentials\" }", ParameterType.RequestBody);
-            var responseJson = client.Execute(request).Content;
-            var token = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseJson)["clientApplications"].ToString();
-            Console.WriteLine(token);
-            if (token.Length == 0)
-            {
-                throw new AuthenticationException("API authentication failed.");
-            }
+            //var client = new RestClient("https://na12.api.project44.com/");
+            //client.Authenticator = new HttpBasicAuthenticator("admin.user@tdr.p44.com", "welcomeP44!");
+            //var request = new RestRequest("api/v4/oauth2/client-applications", Method.GET);
+            //request.AddHeader("content-type", "application/json");
+            //request.AddBody();
+            //request.AddParameter("application/json", "{ \"grant_type\":\"client_credentials\" }", ParameterType.RequestBody);
+            //var responseJson = client.Execute(request).Content;
+            //var token = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseJson)["clientApplications"].ToString();
+            //Console.WriteLine(token);
+            //if (token.Length == 0)
+            //{
+            //    throw new AuthenticationException("API authentication failed.");
+            //}
         }
         #region "Writing JSON"
 
@@ -86,14 +88,14 @@ namespace SereializarJson
 
                                 carrierIdentifier = new Carrier
                                 {
-                                    type = "N/A",
-                                    value = "N/A"
+                                    type = "P44_EU",
+                                    value = "MXTDRTRA"
                                 },
                                 shipmentIdentifiers = new List<Shipment>
                                 {
                                     new Shipment
                                     {
-                                        type = "ORDER",
+                                        type = "BILL_OF_LADING",
                                         value = order
                                     }
                                 },
@@ -116,13 +118,13 @@ namespace SereializarJson
                                 {
                                     contacts.shipmentStops.Add(new Stops
                                     {
-                                        //stopNumber = isegmqa["stp_mfh_sequence"].ToString(),
-                                        stopNumber = isegmqa["stp_number"].ToString(),
+                                        stopNumber = isegmqa["stp_mfh_sequence"].ToString(),
+                                        //stopNumber = isegmqa["stp_number"].ToString(),
                                         appointmentWindow = new Appointment
                                         {
                                             startDateTime = isegmqa["startDateTime"].ToString(),
-                                            endDateTime = isegmqa["endDateTime"].ToString(),
-                                            localTimeZoneIdentifier = "Mexico/Ciudad de Mexico"
+                                            endDateTime = isegmqa["endDateTime"].ToString()//,
+                                            //localTimeZoneIdentifier = "Mexico/Ciudad de Mexico"
                                         },
                                         location = new Location
                                         {
@@ -135,7 +137,8 @@ namespace SereializarJson
                                                 },
                                                 city = isegmqa["cty_nmstct"].ToString(),
                                                 state = isegmqa["cmp_state"].ToString(),
-                                                country = isegmqa["cmp_country"].ToString()
+                                                //country = isegmqa["cmp_country"].ToString()
+                                                country = "MX"
                                                 //AQUI VA LA LISTA DE ADDRESSLINE
                                             },
                                             contact = new Ucontact
@@ -143,7 +146,7 @@ namespace SereializarJson
                                                 companyName = isegmqa["cmp_id"].ToString()
                                             }
                                         },
-                                        stopName = isegmqa["cmp_id"].ToString() + " - " + isegmqa["stp_number"].ToString()
+                                        stopName = isegmqa["cmp_id"].ToString()
 
                                     });
 
@@ -160,43 +163,40 @@ namespace SereializarJson
                             //System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\JsonGenerados\" + rand_num + "-" + carc + "-JsonAPI.json", contactsJson);
 
                     carc++;
-
-                    //try
+                    //var client = new RestClient("https://na12.api.project44.com/");
+                    //client.Authenticator = new HttpBasicAuthenticator("admin.user@tdr.p44.com", "welcomeP44!");
+                    //var request = new RestRequest("api/v4/tl/shipments", Method.POST);
+                    //request.AddHeader("content-type", "application/json");
+                    //request.AddJsonBody(contactsJson);
+                    //request.AddParameter("application/json", "{ \"grant_type\":\"client_credentials\" }", ParameterType.RequestBody);
+                    //var responseJson = client.Execute(request).Content;
+                    //var token = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseJson)["clientApplications"].ToString();
+                    //Console.WriteLine(token);
+                    //if (token.Length == 0)
                     //{
-                    //    var client = new RestClient("https://na12.api.project44.com/api/v4/oauth2/client-applications");
-                    //    //AQUI VAN LAS CREDENCIALES
-                    //    var user = "admin.user@tdr.p44.com";
-                    //    var password = "welcomeP44!";
-                    //    client.Authenticator = new HttpBasicAuthenticator(user, password);
-                    //    var request = new RestRequest(Method.GET);
-
-                    //    request.AddHeader("cache-control", "no-cache");
-
-                    //    request.AddHeader("content-length", "834");
-                    //    request.AddHeader("accept-encoding", "gzip, deflate");
-                    //    request.AddHeader("Host", "canal1.xsa.com.mx:9050");
-                    //    //request.AddHeader("Postman-Token", "b6b7d8eb-29f2-420f-8d70-7775701ec765,a4b60b83-429b-4188-98d4-7983acc6742e");
-                    //    request.AddHeader("Cache-Control", "no-cache");
-                    //    request.AddHeader("Accept", "*/*");
-                    //    request.AddHeader("User-Agent", "PostmanRuntime/7.13.0");
-                    //    request.AddParameter("application/json", contactsJson, ParameterType.RequestBody);
-                    //    //request.AddParameter("application/json", contactsJson, ParameterType.RequestBody);
-                    //    IRestResponse response = client.Execute(request);
-                    //    //string respuesta = response.StatusCode.ToString();
-                    //    //var token = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseJson)["access_token"].ToString();
-                    //    //if (token.Length == 0)
-                    //    //{
-                    //    //    throw new AuthenticationException("API authentication failed.");
-                    //    //}
-                    //}
-                    //catch (Exception)
-                    //{
-
-                    //    throw;
+                    //    throw new AuthenticationException("API authentication failed.");
                     //}
 
+                    //var client = new RestClient("api/v4/oauth2/client-applications");
+                    //var username = "admin.user@tdr.p44.com";
+                    //var password = "welcomeP44!";
+                    //client.Authenticator = new HttpBasicAuthenticator(username, password);
+                    //var request = new RestRequest(Method.PUT);
 
+                    //request.AddHeader("cache-control", "no-cache");
 
+                    //request.AddHeader("content-length", "834");
+                    //request.AddHeader("accept-encoding", "gzip, deflate");
+                    //request.AddHeader("Host", ""https://na12.api.project44.com/"");
+                    //request.AddHeader("Postman-Token", "b6b7d8eb-29f2-420f-8d70-7775701ec765,a4b60b83-429b-4188-98d4-7983acc6742e");
+                    //request.AddHeader("Cache-Control", "no-cache");
+                    //request.AddHeader("Accept", "*/*");
+                    //request.AddHeader("User-Agent", "PostmanRuntime/7.13.0");
+
+                    //request.AddParameter("application/json", contactsJson, ParameterType.RequestBody);
+                    //IRestResponse response = client.Execute(request);
+
+                    //string respuesta = response.StatusCode.ToString();
                 }
             }
             

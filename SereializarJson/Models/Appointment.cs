@@ -10,6 +10,6 @@ namespace SereializarJson.Models
     {
         public string startDateTime { get; set; }
         public string endDateTime { get; set; }
-        public string localTimeZoneIdentifier { get; set; }
+        //public string localTimeZoneIdentifier { get; set; }
     }
 }
