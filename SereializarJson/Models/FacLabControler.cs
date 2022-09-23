@@ -103,6 +103,14 @@ namespace SereializarJson.Models
         {
             this.modelFact.PullOrderReport(Ai_orden);
         }
+        public void OrderCreated(string order, string idd)
+        {
+            this.modelFact.OrderCreated(order, idd);
+        }
+        public void OrderErrors(string order, string msg)
+        {
+            this.modelFact.OrderErrors(order, msg);
+        }
         public void DeleteMerca(string segmentod)
         {
             this.modelFact.DeleteMerca(segmentod);

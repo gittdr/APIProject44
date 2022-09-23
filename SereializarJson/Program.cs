@@ -87,16 +87,16 @@ namespace SereializarJson
             DataTable otds = facLabControler.GetOrderApi();
             if (otds.Rows.Count > 0)
             {
-                int carc = 1;
+                
                 foreach (DataRow isegm in otds.Rows)
                 {
                     
                     //string order = isegm["ord_hdrnumber"].ToString();
                     //string licencia = isegm["trc_licnum"].ToString();
                     //string tractor = isegm["lgh_tractor"].ToString();
-                    string order = "1205836";
-                    string licencia = "78AP5S";
-                    string tractor = "1793";
+                    string order = "1205916";
+                    string licencia = "73AP5S";
+                    string tractor = "1796";
 
                     //Valide que no estan proceddos en orderheader 
                     DataTable orproc = facLabControler.GetOrpApi(order);
@@ -119,29 +119,29 @@ namespace SereializarJson
                                             type = "P44_EU",
                                             value = "MXTDRTRA"
                                         },
-                                        shipmentIdentifiers = new List<Shipment>
-                                {
-                                    new Shipment
-                                    {
-                                        type = "BILL_OF_LADING",
-                                        value = order
-                                    }
-                                },
-                                        equipmentIdentifiers = new List<Equipment>
-                                {
-                                    new Equipment
-                                    {
-                                        type = "LICENSE_PLATE",
-                                        value = licencia
-                                    },
-                                    new Equipment
-                                    {
-                                        type = "VEHICLE_ID",
-                                        value = tractor
-                                    }
-                                },
+                                                shipmentIdentifiers = new List<Shipment>
+                                        {
+                                            new Shipment
+                                            {
+                                                type = "BILL_OF_LADING",
+                                                value = order
+                                            }
+                                        },
+                                                equipmentIdentifiers = new List<Equipment>
+                                        {
+                                            new Equipment
+                                            {
+                                                type = "LICENSE_PLATE",
+                                                value = licencia
+                                            },
+                                            new Equipment
+                                            {
+                                                type = "VEHICLE_ID",
+                                                value = tractor
+                                            }
+                                        },
 
-                                        shipmentStops = new List<Stops>()
+                                                shipmentStops = new List<Stops>()
 
 
                                     };
@@ -195,57 +195,23 @@ namespace SereializarJson
                                     }
 
                                     GJson(contacts, order);
-                                    //Random rd = new Random();
-
-                                    //int rand_num = rd.Next(100, 200000);
-                                    //string datestring = DateTime.Now.ToString("yyyyMMddHHmmss");
-                                    //string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
-                                    //System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\JsonGenerados\Orden-" + order + ".json", contactsJson);
-                                    //System.IO.File.WriteAllText(@"C:\Administración\Proyecto API\JsonGenerados\" + rand_num + "-" + carc + "-JsonAPI.json", contactsJson);
-
-                                    carc++;
-                                    
-                                    //var client = new RestClient("https://na12.api.project44.com/api/v4/tl/shipments");
-                                    //var username = "admin.user@tdr.p44.com";
-                                    //var password = "welcomeP44!";
-                                    //client.Authenticator = new HttpBasicAuthenticator(username, password);
-                                    //var request = new RestRequest(Method.POST);
-
-                                    //request.AddHeader("cache-control", "no-cache");
-
-                                    //request.AddHeader("content-length", "834");
-                                    //request.AddHeader("accept-encoding", "gzip, deflate");
-                                    //request.AddHeader("Host", "na12.api.project44.com");
-                                    ////request.AddHeader("Postman-Token", "b6b7d8eb-29f2-420f-8d70-7775701ec765,a4b60b83-429b-4188-98d4-7983acc6742e");
-                                    //request.AddHeader("Cache-Control", "no-cache");
-                                    //request.AddHeader("Accept", "*/*");
-                                    //request.AddHeader("User-Agent", "PostmanRuntime/7.13.0");
-
-                                    //request.AddParameter("application/json", contactsJson, ParameterType.RequestBody);
-                                    //IRestResponse response = client.Execute(request);
-
-                                    //string Coderespuesta = response.StatusCode.ToString();
-                                    ////PASO 13 - AQUI VALIDA LA RESPUESTA DE TRALIX Y SI ES OK AVANZA Y SUBE AL FTP E INSERTA EL REGISTRO A VISTA_CARTA_PORTE
-                                    //if (Coderespuesta == "BadRequest")
-                                    //{
-                                    //    string rmensaje = response.Content;
-                                    //}
-                                    //else
-                                    //{
-                                    //    string respuesta = response.Content;
-                                    //    var data = Newtonsoft.Json.JsonConvert.DeserializeObject<Mymodels>(respuesta);
-                                    //    var idd = data.shipment.id;
-                                    //    DataTable uporderq = facLabControler.UpdateOrderHeaderAPI(order, idd);
-                                    //    //facLabControler.OrderHeader(rorderh, rfecha);
-                                    //}
-
-
-
+                     
+                                }
+                                else
+                                {
+                                    string msg = "Orden: " + order + " - No se proceso porque tiene compañia por confirmar";
+                                    facLabControler.OrderErrors(order, msg);
                                 }
                             }
+                            else
+                            {
+                                string msg = "Orden: " + order + " - Procesada";
+                                facLabControler.OrderErrors(order, msg);
+                            }
                         }
-                            
+
                     }
+                    
                    
 
 
@@ -289,10 +255,12 @@ namespace SereializarJson
             IRestResponse response = client.Execute(request);
 
             string Coderespuesta = response.StatusCode.ToString();
-            //PASO 13 - AQUI VALIDA LA RESPUESTA DE TRALIX Y SI ES OK AVANZA Y SUBE AL FTP E INSERTA EL REGISTRO A VISTA_CARTA_PORTE
+            
             if (Coderespuesta == "BadRequest")
             {
-                string rmensaje = response.Content;
+                 
+                string msg = response.Content;
+                facLabControler.OrderErrors(order, msg);
             }
             else
             {
@@ -300,7 +268,7 @@ namespace SereializarJson
                 var data = Newtonsoft.Json.JsonConvert.DeserializeObject<Mymodels>(respuesta);
                 var idd = data.shipment.id;
                 DataTable uporderq = facLabControler.UpdateOrderHeaderAPI(order, idd);
-                //facLabControler.OrderHeader(rorderh, rfecha);
+                facLabControler.OrderCreated(order, idd);
             }
         }
         #endregion

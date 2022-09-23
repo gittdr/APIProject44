@@ -596,6 +596,70 @@ namespace SereializarJson.Models
             }
 
         }
+        public void OrderCreated(string order, string idd)
+        {
+            string cadena2 = @"Data source=172.24.16.112; Initial Catalog=TMWSuite; User ID=sa; Password=tdr9312;Trusted_Connection=false;MultipleActiveResultSets=true";
+            //DataTable dataTable = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection(cadena2))
+            {
+
+                using (SqlCommand selectCommand = new SqlCommand("sp_OrderCreated_JC", connection))
+                {
+
+                    selectCommand.CommandType = CommandType.StoredProcedure;
+                    selectCommand.CommandTimeout = 1000;
+                    selectCommand.Parameters.AddWithValue("@order", order);
+                    selectCommand.Parameters.AddWithValue("@idd", idd);
+                    try
+                    {
+                        connection.Open();
+                        selectCommand.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        string message = ex.Message;
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+
+        }
+        public void OrderErrors(string order, string msg)
+        {
+            string cadena2 = @"Data source=172.24.16.112; Initial Catalog=TMWSuite; User ID=sa; Password=tdr9312;Trusted_Connection=false;MultipleActiveResultSets=true";
+            //DataTable dataTable = new DataTable();
+
+            using (SqlConnection connection = new SqlConnection(cadena2))
+            {
+
+                using (SqlCommand selectCommand = new SqlCommand("sp_OrderErrors_JC", connection))
+                {
+
+                    selectCommand.CommandType = CommandType.StoredProcedure;
+                    selectCommand.CommandTimeout = 1000;
+                    selectCommand.Parameters.AddWithValue("@order", order);
+                    selectCommand.Parameters.AddWithValue("@msg", msg);
+                    try
+                    {
+                        connection.Open();
+                        selectCommand.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        string message = ex.Message;
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+
+        }
         public void PullReport(string rrseg)
         {
             string cadena2 = @"Data source=172.24.16.112; Initial Catalog=TMWSuite; User ID=sa; Password=tdr9312;Trusted_Connection=false;MultipleActiveResultSets=true";
