@@ -35,6 +35,14 @@ namespace SereializarJson.Models
         {
             return this.modelFact.GetInfoApi(order);
         }
+        public DataTable GetCmpidApi(string order)
+        {
+            return this.modelFact.GetCmpidApi(order);
+        }
+        public DataTable GetOrpApi(string order)
+        {
+            return this.modelFact.GetOrpApi(order);
+        }
         public DataTable GetOrderApi()
         {
             return this.modelFact.GetOrderApi();
@@ -110,6 +118,10 @@ namespace SereializarJson.Models
         public DataTable UpdateOrderHeader(string orheader, string fecha)
         {
             return this.modelFact.UpdateOrderHeader(orheader, fecha);
+        }
+        public DataTable UpdateOrderHeaderAPI(string order, string idd)
+        {
+            return this.modelFact.UpdateOrderHeaderAPI(order, idd);
         }
         public DataTable VerErrores(string leg)
         {

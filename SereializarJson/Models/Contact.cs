@@ -18,7 +18,9 @@ namespace SereializarJson.Models
         public List<Equipment> equipmentIdentifiers { get; set; }
         
         //public DataTables shipmentStops { get; set; }
+
         public List<Stops> shipmentStops { get; internal set; }
+        //public EquipmentIdentifiers equipmentIdentifiers { get; set; }
 
         //public Appointment appointmentWindow { get; set; }
     }

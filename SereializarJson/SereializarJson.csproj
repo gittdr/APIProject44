@@ -64,7 +64,9 @@
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\DataTables.cs" />
     <Compile Include="Models\Equipment.cs" />
+    <Compile Include="Models\EquipmentIdentifiers.cs" />
     <Compile Include="Models\FacLabControler.cs" />
+    <Compile Include="Models\GeoCoordinates.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Modelfact.cs" />
     <Compile Include="Models\Phone.cs" />
